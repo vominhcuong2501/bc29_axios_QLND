@@ -88,6 +88,7 @@ function addTeacher() {
   var moTa = getEle("MoTa").value;
   var hinhAnh = getEle("HinhAnh").value;
 
+  
   var letter =
     "^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" +
     "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" +
@@ -102,7 +103,9 @@ function addTeacher() {
         taiKhoan,
         "tbTK",
         "*Vui lòng nhập tài khoản"
-      );  
+      ) 
+      // && validation.kiemTraTaiKhoan(taiKhoan, "tbTK", "*Tài khoản đã tồn tại", )
+      ;  
 
   isValid &=
     validation.kiemTraRong(hoTen, "tbTen", "*Vui lòng nhập tên") &&
