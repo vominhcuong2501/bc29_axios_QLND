@@ -9,20 +9,19 @@ function getEle(id) {
 người dùng)
  */
 // Lấy danh sách từ server về
-getEle("btnHienThiDS").onclick = function () {
-  getListTeacher();
-};
+var array = [];
 function getListTeacher() {
   service
     .getListTeacherApi()
     .then(function (result) {
       renderListTeacher(result.data);
+      array.push(result.data);
     })
     .catch(function (error) {
       console.log(error);
     });
 }
-
+getListTeacher();
 function renderListTeacher(data) {
   var contentHTML = "";
   data.forEach(function (teacher, index) {
@@ -88,7 +87,7 @@ function addTeacher() {
   var moTa = getEle("MoTa").value;
   var hinhAnh = getEle("HinhAnh").value;
 
-  
+  // biến validation
   var letter =
     "^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" +
     "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" +
@@ -96,6 +95,7 @@ function addTeacher() {
   var password =
     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,8}$/;
   var Email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
   // flag (cờ) isValid true: hợp lệ / false: không hợp lệ
   var isValid = true;
 
@@ -103,9 +103,7 @@ function addTeacher() {
         taiKhoan,
         "tbTK",
         "*Vui lòng nhập tài khoản"
-      ) 
-      // && validation.kiemTraTaiKhoan(taiKhoan, "tbTK", "*Tài khoản đã tồn tại", )
-      ;  
+      );  
 
   isValid &=
     validation.kiemTraRong(hoTen, "tbTen", "*Vui lòng nhập tên") &&
@@ -232,80 +230,6 @@ function updateTeacher(id) {
   var loaiND = getEle("loaiNguoiDung").value;
   var moTa = getEle("MoTa").value;
   var hinhAnh = getEle("HinhAnh").value;
-
-  var letter =
-    "^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" +
-    "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" +
-    "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$";
-  var password =
-    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,8}$/;
-  var Email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  // flag (cờ) isValid true: hợp lệ / false: không hợp lệ
-  var isValid = true;
-
-  isValid &= validation.kiemTraRong(
-        taiKhoan,
-        "tbTK",
-        "*Vui lòng nhập tài khoản"
-      );  
-
-  isValid &=
-    validation.kiemTraRong(hoTen, "tbTen", "*Vui lòng nhập tên") &&
-    validation.kiemTraKieuDL(
-      hoTen,
-      letter,
-      "tbTen",
-      "*Vui lòng chỉ nhập chữ cái không chưa số và ký tự đặc biệt"
-    );
-
-  isValid &=
-    validation.kiemTraRong(matKhau, "tbMatKhau", "*Vui lòng nhập mật khẩu") &&
-    validation.kiemTraKieuDL(
-      matKhau,
-      password,
-      "tbMatKhau",
-      "*Vui lòng nhập mật khẩu từ 6-8 ký tự chứa ít nhất 1 ký tự viết Hoa, số, ký tự đặc biệt"
-    );
-
-  isValid &=
-    validation.kiemTraRong(email, "tbEmail", "*Vui lòng nhập email") &&
-    validation.kiemTraKieuDL(
-      email,
-      Email,
-      "tbEmail",
-      "*Vui lòng nhập đúng kiểu email (Ví dụ: cuong96@gmail.com)"
-    );
-
-  isValid &= validation.kiemTraRong(
-    hinhAnh,
-    "tbHinhAnh",
-    "*Vui lòng nhập link hình ảnh"
-  );
-
-  isValid &= validation.kiemTraChon(
-    "loaiNgonNgu",
-    "tbLoaiNN",
-    "*Vui lòng chọn ngôn ngữ"
-  );
-
-  isValid &= validation.kiemTraChon(
-    "loaiNguoiDung",
-    "tbLoaiND",
-    "*Vui lòng chọn người dùng"
-  );
-
-  isValid &=
-    validation.kiemTraRong(moTa, "tbMoTa", "*Vui lòng nhập mô tả") &&
-    validation.kiemTraDoDaiKyTu(
-      moTa,
-      "tbMoTa",
-      "*Vui lòng nhập mô tả dưới 60 ký tự",
-      60,
-      1
-    );
-
-  // check isValid
-  if (!isValid) return;
 
   var teacher = new Teacher(
     id,

@@ -25,12 +25,11 @@ function Validation() {
   };
   this.kiemTraTaiKhoan = function (value, errorID, mess, arr) {
     var isStatus = true;
-    arr.forEach(function (teacher) {
-      if (teacher.taiKhoan === value) {
+    arr.forEach(function (item) {
+      if (item.taiKhoan === value) {
         isStatus = false;
       }
     });
-
     if (isStatus) {
       getEle(errorID).style.display = "none";
       getEle(errorID).innerHTML = "";
