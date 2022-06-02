@@ -23,22 +23,22 @@ function Validation() {
     getEle(errorID).innerHTML = "";
     return true;
   };
-  this.kiemTraTaiKhoan = function (value, errorID, mess, arr) {
-    var isStatus = true;
-    arr.forEach(function (item) {
-      if (item.taiKhoan === value) {
-        isStatus = false;
-      }
-    });
-    if (isStatus) {
-      getEle(errorID).style.display = "none";
-      getEle(errorID).innerHTML = "";
-      return true;
-    }
-    getEle(errorID).style.display = "block";
-    getEle(errorID).innerHTML = mess;
-    return false;
-  };
+  // this.kiemTraTaiKhoan = function (value, errorID, mess, arr) {
+  //   var isStatus = true;
+  //   arr.forEach(function (item) {
+  //     if (item.taiKhoan === value) {
+  //       isStatus = false;
+  //     }
+  //   });
+  //   if (isStatus) {
+  //     getEle(errorID).style.display = "none";
+  //     getEle(errorID).innerHTML = "";
+  //     return true;
+  //   }
+  //   getEle(errorID).style.display = "block";
+  //   getEle(errorID).innerHTML = mess;
+  //   return false;
+  // };
 
   this.kiemTraChon = function (selectId, errorID, mess) {
     if (getEle(selectId).selectedIndex !== 0) {

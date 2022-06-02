@@ -22,6 +22,7 @@ function getListTeacher() {
     });
 }
 getListTeacher();
+
 function renderListTeacher(data) {
   var contentHTML = "";
   data.forEach(function (teacher, index) {
@@ -95,7 +96,7 @@ function addTeacher() {
   var password =
     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,8}$/;
   var Email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
+  
   // flag (cờ) isValid true: hợp lệ / false: không hợp lệ
   var isValid = true;
 
@@ -103,7 +104,7 @@ function addTeacher() {
         taiKhoan,
         "tbTK",
         "*Vui lòng nhập tài khoản"
-      );  
+      ) ;  
 
   isValid &=
     validation.kiemTraRong(hoTen, "tbTen", "*Vui lòng nhập tên") &&
