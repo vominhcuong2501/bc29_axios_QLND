@@ -2,14 +2,14 @@ function Services() {
   this.getListTeacherApi = function () {
     return axios({
       url: "https://628b9961667aea3a3e32d1c5.mockapi.io/api/teachers",
-      method: "GET",
+      method: "GET"
     });
   };
 
   this.deleteTeacherApi = function (id) {
     return axios({
       url: `https://628b9961667aea3a3e32d1c5.mockapi.io/api/teachers/${id}`,
-      method: "DELETE",
+      method: "DELETE"
     });
   };
 
@@ -17,14 +17,14 @@ function Services() {
     return axios({
       url: "https://628b9961667aea3a3e32d1c5.mockapi.io/api/teachers",
       method: "POST",
-      data: teacher,
+      data: teacher
     });
   };
 
   this.getTeacherById = function (id) {
     return axios({
       url: `https://628b9961667aea3a3e32d1c5.mockapi.io/api/teachers/${id}`,
-      method: "GET",
+      method: "GET"
     });
   };
 
@@ -32,7 +32,7 @@ function Services() {
     return axios({
       url: `https://628b9961667aea3a3e32d1c5.mockapi.io/api/teachers/${teacher.id}`,
       method: "PUT",
-      data: teacher,
+      data: teacher
     });
   };
 }

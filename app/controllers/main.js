@@ -1,21 +1,39 @@
 var service = new Services();
 var validation = new Validation();
+var arrayTeacher = [];
 
 function getEle(id) {
   return document.getElementById(id);
+}
+
+function resetValue() {
+  getEle("TaiKhoan").value = "";
+  getEle("HoTen").value = "";
+  getEle("MatKhau").value = "";
+  getEle("Email").value = "";
+  getEle("HinhAnh").value = "";
+  getEle("loaiNguoiDung").selectedIndex = 0;
+  getEle("loaiNgonNgu").selectedIndex = 0;
+  getEle("MoTa").value = "";
+}
+
+function getData(data) {
+  data.forEach(function (ele) {
+    arrayTeacher.push(ele);
+  });
 }
 /**
  * Câu 5: Sử dụng Axios để xây dựng các chức năng cho admin (hiện danh sách, thêm, xóa, cập nhật
 người dùng)
  */
 // Lấy danh sách từ server về
-var array = [];
+
 function getListTeacher() {
   service
     .getListTeacherApi()
     .then(function (result) {
       renderListTeacher(result.data);
-      array.push(result.data);
+      getData(result.data);
     })
     .catch(function (error) {
       console.log(error);
@@ -79,6 +97,75 @@ getEle("btnThemNguoiDung").onclick = function () {
  * Thêm người dùng
  */
 function addTeacher() {
+  var teacher = validTeacher(true , false, "");
+  if (teacher == null) { return };  
+  service
+    .addTeacherApi(teacher)
+    .then(function () {
+      getListTeacher();
+      document.getElementsByClassName("close")[0].click();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  resetValue();
+}
+
+/**
+ * Sửa người dùng
+ */
+function editTeacher(id) {
+  // khóa nút tài khoản
+    getEle("TaiKhoan").disabled = true;
+  // đổi tên tiêu đề
+  document.getElementsByClassName("modal-title")[0].innerHTML =
+    "Cập nhật người dùng";
+  // thêm nút add
+  var footer = `<button class="btn btn-primary"  onclick = "updateTeacher(${id})">Update</button>`;
+  document.getElementsByClassName("modal-footer")[0].innerHTML = footer;
+
+  service
+    .getTeacherById(id)
+    .then(function (result) {
+      getEle("TaiKhoan").value = result.data.taiKhoan;
+      getEle("HoTen").value = result.data.hoTen;
+      getEle("MatKhau").value = result.data.matKhau;
+      getEle("Email").value = result.data.email;
+      getEle("loaiNgonNgu").value = result.data.ngonNgu;
+      getEle("loaiNguoiDung").value = result.data.loaiND;
+      getEle("MoTa").value = result.data.moTa;
+      getEle("HinhAnh").value = result.data.hinhAnh;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    resetValue();
+}
+
+/**
+ * Update người dùng
+ */
+function updateTeacher(id) {
+  var teacher = validTeacher(false, true, id);
+  if (teacher == null) { return };  
+  service
+  .updateTeacherById(teacher)
+  .then(function() {
+    getListTeacher();
+    document.getElementsByClassName("close")[0].click();
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+  resetValue();
+}
+
+
+function validTeacher(isAdd, isEdit, id) {
+  // đặt biến isEdit nếu true id = id (update), false id = "" (thêm),
+  // đặt biến isAdd xét TK, true ở thêm, false ở update.
+  var id = isEdit ? id : "";
+
   var taiKhoan = getEle("TaiKhoan").value;
   var hoTen = getEle("HoTen").value;
   var matKhau = getEle("MatKhau").value;
@@ -87,6 +174,18 @@ function addTeacher() {
   var loaiND = getEle("loaiNguoiDung").value;
   var moTa = getEle("MoTa").value;
   var hinhAnh = getEle("HinhAnh").value;
+  // tạo lớp đối tượng
+  var teacher = new Teacher(
+    id,
+    taiKhoan,
+    hoTen,
+    matKhau,
+    email,
+    ngonNgu,
+    loaiND,
+    moTa,
+    hinhAnh
+  );
 
   // biến validation
   var letter =
@@ -96,15 +195,20 @@ function addTeacher() {
   var password =
     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,8}$/;
   var Email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  
+
   // flag (cờ) isValid true: hợp lệ / false: không hợp lệ
   var isValid = true;
 
-  isValid &= validation.kiemTraRong(
-        taiKhoan,
-        "tbTK",
-        "*Vui lòng nhập tài khoản"
-      ) ;  
+  if(isAdd) {
+    isValid &=
+    validation.kiemTraRong(taiKhoan, "tbTK", "*Vui lòng nhập tài khoản") &&
+    validation.kiemTraTaiKhoan(
+      taiKhoan,
+      "tbTK",
+      "*Tài khoản đã tồn tại",
+      arrayTeacher
+    );
+  }
 
   isValid &=
     validation.kiemTraRong(hoTen, "tbTen", "*Vui lòng nhập tên") &&
@@ -162,95 +266,6 @@ function addTeacher() {
     );
 
   // check isValid
-  if (!isValid) return;
-
-  // tạo lớp đối tượng
-  var teacher = new Teacher(
-    "",
-    taiKhoan,
-    hoTen,
-    matKhau,
-    email,
-    ngonNgu,
-    loaiND,
-    moTa,
-    hinhAnh
-  );
-  service
-    .addTeacherApi(teacher)
-    .then(function () {
-      // render table
-      getListTeacher();
-      // close modal
-      document.getElementsByClassName("close")[0].click();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
-
-/**
- * Sửa người dùng
- */
-function editTeacher(id) {
-  // đổi tên tiêu đề
-  document.getElementsByClassName("modal-title")[0].innerHTML =
-    "Cập nhật người dùng";
-  // thêm nút add
-  var footer = `<button class="btn btn-primary"  onclick = "updateTeacher(${id})">Update</button>`;
-  document.getElementsByClassName("modal-footer")[0].innerHTML = footer;
-
-  service
-    .getTeacherById(id)
-    .then(function (result) {
-      getEle("TaiKhoan").value = result.data.taiKhoan;
-      getEle("HoTen").value = result.data.hoTen;
-      getEle("MatKhau").value = result.data.matKhau;
-      getEle("Email").value = result.data.email;
-      getEle("loaiNgonNgu").value = result.data.ngonNgu;
-      getEle("loaiNguoiDung").value = result.data.loaiND;
-      getEle("MoTa").value = result.data.moTa;
-      getEle("HinhAnh").value = result.data.hinhAnh;
-      // khóa nút tài khoản
-      getEle("TaiKhoan").disabled = true;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
-
-/**
- * Update người dùng
- */
-function updateTeacher(id) {
-  var taiKhoan = getEle("TaiKhoan").value;
-  var hoTen = getEle("HoTen").value;
-  var matKhau = getEle("MatKhau").value;
-  var email = getEle("Email").value;
-  var ngonNgu = getEle("loaiNgonNgu").value;
-  var loaiND = getEle("loaiNguoiDung").value;
-  var moTa = getEle("MoTa").value;
-  var hinhAnh = getEle("HinhAnh").value;
-
-  var teacher = new Teacher(
-    id,
-    taiKhoan,
-    hoTen,
-    matKhau,
-    email,
-    ngonNgu,
-    loaiND,
-    moTa,
-    hinhAnh
-  );
-
-  service
-    .updateTeacherById(teacher)
-    .then(function () {
-      getListTeacher();
-      document.getElementsByClassName("close")[0].click();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  if (!isValid) {return  null};
+  return teacher;
 }
