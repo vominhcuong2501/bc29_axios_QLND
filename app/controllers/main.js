@@ -201,65 +201,65 @@ function validTeacher(isAdd, isEdit, id) {
 
   if(isAdd) {
     isValid &=
-    validation.kiemTraRong(taiKhoan, "tbTK", "*Vui lòng nhập tài khoản") &&
+    validation.kiemTraRong(taiKhoan, "errorTK", "*Vui lòng nhập tài khoản") &&
     validation.kiemTraTaiKhoan(
       taiKhoan,
-      "tbTK",
+      "errorTK",
       "*Tài khoản đã tồn tại",
       arrayTeacher
     );
   }
 
   isValid &=
-    validation.kiemTraRong(hoTen, "tbTen", "*Vui lòng nhập tên") &&
+    validation.kiemTraRong(hoTen, "errorTen", "*Vui lòng nhập tên") &&
     validation.kiemTraKieuDL(
       hoTen,
       letter,
-      "tbTen",
+      "errorTen",
       "*Vui lòng chỉ nhập chữ cái không chưa số và ký tự đặc biệt"
     );
 
   isValid &=
-    validation.kiemTraRong(matKhau, "tbMatKhau", "*Vui lòng nhập mật khẩu") &&
+    validation.kiemTraRong(matKhau, "errorMK", "*Vui lòng nhập mật khẩu") &&
     validation.kiemTraKieuDL(
       matKhau,
       password,
-      "tbMatKhau",
+      "errorMK",
       "*Vui lòng nhập mật khẩu từ 6-8 ký tự chứa ít nhất 1 ký tự viết Hoa, số, ký tự đặc biệt"
     );
 
   isValid &=
-    validation.kiemTraRong(email, "tbEmail", "*Vui lòng nhập email") &&
+    validation.kiemTraRong(email, "errorEmail", "*Vui lòng nhập email") &&
     validation.kiemTraKieuDL(
       email,
       Email,
-      "tbEmail",
+      "errorEmail",
       "*Vui lòng nhập đúng kiểu email (Ví dụ: cuong96@gmail.com)"
     );
 
   isValid &= validation.kiemTraRong(
     hinhAnh,
-    "tbHinhAnh",
+    "errorHinhAnh",
     "*Vui lòng nhập link hình ảnh"
   );
 
   isValid &= validation.kiemTraChon(
     "loaiNgonNgu",
-    "tbLoaiNN",
+    "errorLoaiNN",
     "*Vui lòng chọn ngôn ngữ"
   );
 
   isValid &= validation.kiemTraChon(
     "loaiNguoiDung",
-    "tbLoaiND",
+    "errorLoaiND",
     "*Vui lòng chọn người dùng"
   );
 
   isValid &=
-    validation.kiemTraRong(moTa, "tbMoTa", "*Vui lòng nhập mô tả") &&
+    validation.kiemTraRong(moTa, "errorMoTa", "*Vui lòng nhập mô tả") &&
     validation.kiemTraDoDaiKyTu(
       moTa,
-      "tbMoTa",
+      "errorMoTa",
       "*Vui lòng nhập mô tả dưới 60 ký tự",
       60,
       1
