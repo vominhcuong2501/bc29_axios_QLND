@@ -85,6 +85,9 @@ function deleteTeacher(id) {
  * Nhấn nút thêm mới
  */
 getEle("btnThemNguoiDung").onclick = function () {
+  resetValue();
+  // mở nút tài khoản
+  getEle("TaiKhoan").disabled = false;
   // đổi tên tiêu đề
   document.getElementsByClassName("modal-title")[0].innerHTML =
     "Thêm người dùng";

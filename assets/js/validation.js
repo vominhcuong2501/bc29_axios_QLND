@@ -23,6 +23,7 @@ function Validation() {
     getEle(errorID).innerHTML = "";
     return true;
   };
+  
   this.kiemTraTaiKhoan = function (value, errorID, mess, arr) {
     var isStatus = true;
     arr.forEach(function (item) {
